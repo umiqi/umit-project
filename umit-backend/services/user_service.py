@@ -1,5 +1,6 @@
 from models.user_model import User
 
+
 class UserService:
     @staticmethod
     def get_users():

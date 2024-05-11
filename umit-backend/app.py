@@ -1,26 +1,35 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from config.database import db
-from routes.auth import auth_blueprint
-from routes.user import user_blueprint
-from routes.project import project_blueprint
 
 app = Flask(__name__)
-app.config.from_object('config.env')
 
-db.init_app(app)
+# Örnek veri
+data = [
+    {'id': 1, 'name': 'John'},
+    {'id': 2, 'name': 'Jane'}
+]
 
-app.register_blueprint(auth_blueprint)
-app.register_blueprint(user_blueprint)
-app.register_blueprint(project_blueprint)
+# Örnek rota: Ana sayfa
+@app.route('/')
+def index():
+    return 'Merhaba, Umit Project!'
 
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({'error': 'Not found'}), 404
+# Örnek rota: Veri getirme
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    return jsonify(data)
 
-@app.errorhandler(500)
-def internal_server_error(error):
-    return jsonify({'error': 'Internal Server Error'}), 500
+# Örnek rota: Kullanıcı ekleme
+@app.route('/user', methods=['POST'])
+def add_user():
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+
+    # Veritabanına kullanıcı ekleme mantığı buraya gelecek
+
+    return jsonify({'message': 'Kullanıcı başarıyla eklendi'}), 201
+
+# Diğer rotalar ve kodlar buraya gelecek
 
 if __name__ == '__main__':
     app.run(debug=True)
